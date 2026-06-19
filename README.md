@@ -29,6 +29,45 @@ Body.overwrite(
 const Button = (...props) => $.button(props, 'Простой компонент кнопки')
 ```
 
+## `snwlib-css`
+Глобальные стили для `snwlib` с декларативным деревом селекторов.
+
+Зависимости: нет
+```js
+css('app', {
+    display: 'block'
+},
+    css('button', {
+        padding: '8px 12px'
+    },
+        css(':hover', {
+            opacity: 0.8
+        })
+    ),
+    css('> span', {
+        color: '#f00'
+    })
+)
+
+cssMedia('(max-width: 640px)',
+    css('app', {
+        padding: '12px'
+    })
+)
+
+cssMedia(cssScreens.mobile,
+    css('app', {
+        gap: '8px'
+    })
+)
+
+cssKeyframes('fade-in', {
+    from: { opacity: 0 },
+    to: { opacity: 1 }
+})
+```
+Повторный импорт не дублирует уже добавленные селекторы и `@keyframes`.
+
 ## `gicons`
 Ультрабыстрая сlient-side vanillajs библиотека, импортирующая иконки из [библиотеки гугла в Rounded стиле](https://fonts.google.com/icons?icon.style=Rounded) 
 
