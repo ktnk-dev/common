@@ -1,8 +1,15 @@
 # `snwlib-css`
-Глобальные стили для `snwlib` на нативном JS.
+Глобальные стили на нативном JS с декларативным деревом селекторов. Библиотека создаёт один общий `<style>` и не дублирует уже добавленные правила при повторном импорте.
 
 Зависимости: нет
 
+## Что есть
+- `css(selector, styles?, ...children)` для описания обычных правил
+- `cssMedia(query, ...children)` для `@media`
+- `cssKeyframes(name, frames)` для `@keyframes`
+- `cssScreens.mobile`, `cssScreens.tablet`, `cssScreens.desktop` с готовыми брейкпоинтами
+
+## Пример использования
 ```js
 css('app', {
     display: 'block'
