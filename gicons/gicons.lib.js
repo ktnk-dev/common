@@ -166,7 +166,8 @@ const Icons = new Proxy(
     }
 )
 
-const gIconsInit = () => document.head.innerHTML += `
-    <link rel="stylesheet" href="./gicons.lib.css">
-`
+// dont needed?
+// const gIconsInit = () => document.head.innerHTML += `
+//     <link rel="stylesheet" href="./gicons.lib.css">
+// `
 
