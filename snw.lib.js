@@ -1,24 +1,76 @@
 /**
+ * @typedef {string | number | boolean | null | undefined} AttributeValue
+ */
+
+/**
+ * React-like inline styles for `props.style`.
+ *
+ * Values can be set in camelCase, for example:
+ * `backgroundColor`, `fontSize`, `justifyContent`.
+ *
+ * @typedef {Partial<CSSStyleDeclaration> & Record<string, string | number | null | undefined>} StyleProps
+ */
+
+/**
+ * @callback DOMEventHandler
+ * @param {Event} event
+ * @returns {unknown}
+ */
+
+/**
+ * @typedef {Object} ElementProps
+ * @property {string=} id
+ * @property {string=} class
+ * @property {string=} className
+ * @property {string=} title
+ * @property {string=} role
+ * @property {string=} type
+ * @property {string=} name
+ * @property {string | number=} value
+ * @property {string=} href
+ * @property {string=} src
+ * @property {string=} alt
+ * @property {string=} placeholder
+ * @property {boolean=} checked
+ * @property {boolean=} disabled
+ * @property {boolean=} selected
+ * @property {StyleProps=} style
+ * @property {DOMEventHandler=} onclick
+ * @property {DOMEventHandler=} oninput
+ * @property {DOMEventHandler=} onchange
+ * @property {DOMEventHandler=} onsubmit
+ * @property {DOMEventHandler=} onfocus
+ * @property {DOMEventHandler=} onblur
+ * @property {DOMEventHandler=} onkeydown
+ * @property {DOMEventHandler=} onkeyup
+ * @property {DOMEventHandler=} onmouseenter
+ * @property {DOMEventHandler=} onmouseleave
+ * @property {DOMEventHandler=} ondragstart
+ * @property {DOMEventHandler=} ondrop
+ * @property {AttributeValue | StyleProps | DOMEventHandler=} [key]
+ */
+
+/**
  * @typedef {Object} $
- * @property {function(object=, ...HTMLElement): HTMLElement} div - creates div element
- * @property {function(object=, ...HTMLElement): HTMLElement} p - creates p element
- * @property {function(object=, ...HTMLElement): HTMLElement} span - creates span element
- * @property {function(object=, ...HTMLElement): HTMLElement} button - creates button element
- * @property {function(object=, ...HTMLElement): HTMLElement} input - creates input element
- * @property {function(object=, ...HTMLElement): HTMLElement} a - creates a element
- * @property {function(object=, ...HTMLElement): HTMLElement} img - creates img element
- * @property {function(object=, ...HTMLElement): HTMLElement} h1 - creates h1 element
- * @property {function(object=, ...HTMLElement): HTMLElement} h2 - creates h2 element
- * @property {function(object=, ...HTMLElement): HTMLElement} h3 - creates h3 element
- * @property {function(object=, ...HTMLElement): HTMLElement} h4 - creates h4 element
- * @property {function(object=, ...HTMLElement): HTMLElement} h5 - creates h5 element
- * @property {function(object=, ...HTMLElement): HTMLElement} h6 - creates h6 element
- * @property {function(object=, ...HTMLElement): HTMLElement} ul - creates ul element
- * @property {function(object=, ...HTMLElement): HTMLElement} li - creates li element
- * @property {function(object=, ...HTMLElement): HTMLElement} form - creates form element
- * @property {function(object=, ...HTMLElement): HTMLElement} table - creates table element
- * @property {function(object=, ...HTMLElement): HTMLElement} tr - creates tr element
- * @property {function(object=, ...HTMLElement): HTMLElement} td - creates td element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} div - creates div element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} p - creates p element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} span - creates span element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} button - creates button element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} input - creates input element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} a - creates a element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} img - creates img element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} h1 - creates h1 element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} h2 - creates h2 element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} h3 - creates h3 element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} h4 - creates h4 element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} h5 - creates h5 element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} h6 - creates h6 element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} ul - creates ul element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} li - creates li element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} form - creates form element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} table - creates table element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} tr - creates tr element
+ * @property {function(ElementProps=, ...(HTMLElement | string | number | Array.<HTMLElement | string | number>)): HTMLElement} td - creates td element
 */
 
 /**
@@ -31,8 +83,8 @@ const $ = new Proxy(
         /**
          * ### Creates `$` element
          * @param {string} type element type
-         * @param {object} props element properties (onclick, class, ...)
-         * @param  {...HTMLElement} children 
+         * @param {ElementProps | HTMLElement | string | number} props element properties (onclick, class, style, ...)
+         * @param  {...(HTMLElement | string | number | Array.<HTMLElement | string | number>)} children 
          * @returns {HTMLElement}
          */
         static createElement(type, props, ...children) {
@@ -50,10 +102,18 @@ const $ = new Proxy(
                     for (const [key, value] of Object.entries(props)) {
                         if (key.startsWith('on') && typeof value === 'function') {
                             element.addEventListener(key.slice(2).toLowerCase(), value)
+                        } else if (key === 'style' && value && typeof value === 'object') {
+                            Object.assign(element.style, value)
                         } else if (key === 'className') {
                             element.className = value
+                        } else if (value === false || value == null) {
+                            element.removeAttribute(key)
+                        } else if (value === true) {
+                            element.setAttribute(key, '')
+                            if (key in element) element[key] = true
                         } else {
                             element.setAttribute(key, value)
+                            if (key in element) element[key] = value
                         }
                     }
                 }
